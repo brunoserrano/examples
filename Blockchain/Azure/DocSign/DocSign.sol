@@ -2,7 +2,7 @@ pragma solidity >=0.4.25 <0.6.0;
 
 contract DocSign {
     // Set states
-    enum StateType { Created, Signed, Active, Inactive }
+    enum StateType { Created, Signed, Active, Paused, Terminated, Canceled }
 
     // Properties
     StateType public State;
@@ -10,61 +10,100 @@ contract DocSign {
     string public Id2;
     string public Hsh;
     string public Url;
-    address public Contractor;
-    address public Contracted;
-    address public Testifier;
+    mapping (address => uint) public Participants;
     address public CreatedBy;
-    bool public ContractorDidSign;
-    bool public ContractedDidSign;
-    bool public TestifierDidSign;
 
-    constructor (string memory id1, string memory id2, string memory hsh, string memory url,
-      address contractor, address contracted, address testifier) public {
+    address public Interactor;
 
-        Id1 = id1;
-        Id2 = id2;
-        Hsh = hsh;
-        Url = url;
-        Contractor = contractor;
-        Contracted = contracted;
-        Testifier = testifier;
+    address[] private _participantIds;
+    uint private _participantsCount;
 
-        State = StateType.Created;
-        CreatedBy = msg.sender;
+    constructor (string memory id1, string memory id2, string memory hsh, string memory url, address createdBy) public {
+        Update(id1, id2, hsh, url, createdBy);
+
+        Interactor = msg.sender;
+
+        _participantsCount = 0;
+        _participantIds = new address[](_participantsCount);
     }
 
-    function Sign() public {
-        if (msg.sender == Contractor && !ContractorDidSign) {
-            ContractorDidSign = true;
-        }
-        else if (msg.sender == Contracted && !ContractedDidSign) {
-            ContractedDidSign = true;
-        }
-        else if (msg.sender == Testifier && !TestifierDidSign) {
-            TestifierDidSign = true;
-        }
-        else {
-            revert("Contract can't be signed by this person.");
+    function AddParticipant(address participant) public {
+        Participants[participant] = 1;
+
+        _participantsCount++;
+        _participantIds.push(participant);
+    }
+
+    function RemoveParticipant(address participant) public {
+        Participants[participant] = 0;
+    }
+
+    function Sign(address person) public {
+        if (Participants[person] != 1) {
+            revert("Participant is not in the 'Sign' state.");
         }
 
-        if (ContractorDidSign && ContractedDidSign && TestifierDidSign) {
+        Participants[person] = 2;
+
+        bool didSign = true;
+        for (uint8 index = 0; index < _participantIds.length; index++) {
+            if (Participants[_participantIds[index]] != 2) {
+                didSign = false;
+                break;
+            }
+        }
+
+        if (didSign) {
             State = StateType.Signed;
         }
     }
 
-    function Activate() public {
-        if (msg.sender != CreatedBy) {
+    function Activate(address person) public {
+        if (person != CreatedBy) {
             revert("Contract can't be activated by this person.");
         }
 
         State = StateType.Active;
     }
 
-    function Inactivate() public {
-        if (msg.sender != CreatedBy) {
-            revert("Contract can't be inactivated by this person.");
+    function Pause(address person) public {
+        if (person != CreatedBy) {
+            revert("Contract can't be paused by this person.");
         }
 
-        State = StateType.Inactive;
+        State = StateType.Paused;
+    }
+
+    function Terminate(address person) public {
+        if (person != CreatedBy) {
+            revert("Contract can't be terminated by this person.");
+        }
+
+        State = StateType.Terminated;
+    }
+
+    function Cancel(address person) public {
+        if (person != CreatedBy) {
+            revert("Contract can't be canceled by this person.");
+        }
+
+        State = StateType.Canceled;
+    }
+
+    function Update(string memory id1, string memory id2, string memory hsh, string memory url, address createdBy) public {
+
+        Id1 = id1;
+        Id2 = id2;
+        Hsh = hsh;
+        Url = url;
+        CreatedBy = createdBy;
+
+        State = StateType.Created;
+
+        for (uint8 index = 0; index < _participantIds.length; index++) {
+            if (Participants[_participantIds[index]] != 0 && Participants[_participantIds[index]] != 1) {
+                Participants[_participantIds[index]] = 1;
+            }
+        }
     }
 }

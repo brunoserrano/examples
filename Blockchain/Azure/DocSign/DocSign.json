@@ -4,28 +4,24 @@
   "Description": "...",
   "ApplicationRoles": [
     {
-      "Name": "Contractor",
-      "Description": "..."
-    },
-    {
-      "Name": "Contracted",
-      "Description": "..."
-    },
-    {
-      "Name": "Testifier",
-      "Description": "..."
-    },
-    {
       "Name": "Creator",
-      "Description": "..."
+      "Description": "The person who creates contracts."
+    },
+    {
+        "Name": "Participant",
+        "Description": "A participant in the contract."
+    },
+    {
+      "Name": "Interactor",
+      "Description": "The person who will interact directly with the contract (i.e. the API)."
     }
   ],
   "Workflows": [
     {
       "Name": "DocSign",
       "DisplayName": "Ducument Sign",
-      "Description": "...",
-      "Initiators": [ "Creator" ],
+      "Description": "The document sign workflow.",
+      "Initiators": [ "Creator", "Interactor" ],
       "StartState":  "Created",
       "Properties": [
         {
@@ -37,41 +33,25 @@
           }
         },
         {
-          "Name": "Contractor",
-          "DisplayName": "Contractor",
-          "Description": "...",
-          "Type": {
-            "Name": "Contractor"
-          }
-        },
-        {
-          "Name": "Contracted",
-          "DisplayName": "Contracted",
-          "Description": "...",
-          "Type": {
-            "Name": "Contracted"
-          }
-        },
-        {
-          "Name": "Testifier",
-          "DisplayName": "Testifier",
-          "Description": "...",
-          "Type": {
-            "Name": "Testifier"
-          }
-        },
-        {
           "Name": "CreatedBy",
           "DisplayName": "Created By",
-          "Description": "...",
+          "Description": "The person who creates contracts.",
           "Type": {
             "Name": "Creator"
           }
         },
         {
+          "Name": "Interactor",
+          "DisplayName": "Interactor",
+          "Description": "The person who will interact directly with the contract (i.e. the API).",
+          "Type": {
+            "Name": "Interactor"
+          }
+        },
+        {
           "Name": "Id1",
           "DisplayName": "Id1",
-          "Description": "...",
+          "Description": "The first ID of the document.",
           "Type": {
             "Name": "string"
           }
@@ -79,7 +59,7 @@
         {
           "Name": "Id2",
           "DisplayName": "Id2",
-          "Description": "...",
+          "Description": "The second ID of the document.",
           "Type": {
             "Name": "string"
           }
@@ -87,7 +67,7 @@
         {
           "Name": "Hsh",
           "DisplayName": "Hash",
-          "Description": "...",
+          "Description": "The SHA256 hash of the content.",
           "Type": {
             "Name": "string"
           }
@@ -95,33 +75,9 @@
         {
           "Name": "Url",
           "DisplayName": "URL",
-          "Description": "...",
+          "Description": "The URL that keeps the document.",
           "Type": {
             "Name": "string"
-          }
-        },
-        {
-          "Name": "ContractorDidSign",
-          "DisplayName": "Contractor Did Sign",
-          "Description": "...",
-          "Type": {
-            "Name": "bool"
-          }
-        },
-        {
-          "Name": "ContractedDidSign",
-          "DisplayName": "Contracted Did Sign",
-          "Description": "...",
-          "Type": {
-            "Name": "bool"
-          }
-        },
-        {
-          "Name": "TestifierDidSign",
-          "DisplayName": "Testifier Did Sign",
-          "Description": "...",
-          "Type": {
-            "Name": "bool"
           }
         }
       ],
@@ -160,37 +116,59 @@
             }
           },
           {
-            "Name": "contractor",
+            "Name": "createdBy",
             "Description": "...",
-            "DisplayName": "Contractor",
+            "DisplayName": "Created By",
             "Type": {
-              "Name": "Contractor"
-            }
-          },
-          {
-            "Name": "contracted",
-            "Description": "...",
-            "DisplayName": "Contracted",
-            "Type": {
-              "Name": "Contracted"
-            }
-          },
-          {
-            "Name": "testifier",
-            "Description": "...",
-            "DisplayName": "Testifier",
-            "Type": {
-              "Name": "Testifier"
+              "Name": "Creator"
             }
           }
         ]
       },
       "Functions": [
         {
+          "Name": "AddParticipant",
+          "DisplayName": "Add Participant",
+          "Description": "Adds a participant to the contract.",
+          "Parameters": [
+            {
+              "Name": "participant",
+              "Description": "A participant that will sign the contract.",
+              "DisplayName": "Participant",
+              "Type": {
+                "Name": "address"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "RemoveParticipant",
+          "DisplayName": "Remove Participant",
+          "Description": "Removes a participant from the contract.",
+          "Parameters": [
+            {
+              "Name": "participant",
+              "Description": "A participant that will not sign the contract anymore.",
+              "DisplayName": "Participant",
+              "Type": {
+                "Name": "address"
+              }
+            }
+          ]
+        },
+        {
           "Name": "Sign",
           "DisplayName": "Sign",
-          "Description": "...",
+          "Description": "Sign the contract.",
           "Parameters": [
+            {
+              "Name": "person",
+              "Description": "The person that is signing the contract.",
+              "DisplayName": "Person",
+              "Type": {
+                "Name": "address"
+              }
+            }
           ]
         },
 		{
@@ -198,13 +176,106 @@
           "DisplayName": "Activate",
           "Description": "...",
           "Parameters": [
+            {
+              "Name": "person",
+              "Description": "The person that is activating the contract.",
+              "DisplayName": "Person",
+              "Type": {
+                "Name": "address"
+              }
+            }
           ]
         },
 		{
-          "Name": "Inactivate",
-          "DisplayName": "Inactivate",
+          "Name": "Pause",
+          "DisplayName": "Pause",
           "Description": "...",
           "Parameters": [
+            {
+              "Name": "person",
+              "Description": "The person that is pausing the contract.",
+              "DisplayName": "Person",
+              "Type": {
+                "Name": "address"
+              }
+            }
+          ]
+        },
+		{
+          "Name": "Terminate",
+          "DisplayName": "Terminate",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "person",
+              "Description": "The person that is terminating the contract.",
+              "DisplayName": "Person",
+              "Type": {
+                "Name": "address"
+              }
+            }
+          ]
+        },
+		{
+          "Name": "Cancel",
+          "DisplayName": "Cancel",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "person",
+              "Description": "The person that is canceling the contract.",
+              "DisplayName": "Person",
+              "Type": {
+                "Name": "address"
+              }
+            }
+          ]
+        },
+		{
+          "Name": "Update",
+          "DisplayName": "Update",
+          "Description": "...",
+          "Parameters": [
+            {
+              "Name": "id1",
+              "Description": "...",
+              "DisplayName": "First ID of PDF ID pair",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "id2",
+              "Description": "...",
+              "DisplayName": "Second ID of PDF ID pair",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "hsh",
+              "Description": "...",
+              "DisplayName": "PDF Hash",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "url",
+              "Description": "...",
+              "DisplayName": "PDF URL",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "createdBy",
+              "Description": "...",
+              "DisplayName": "Created By",
+              "Type": {
+                "Name": "Creator"
+              }
+            }
           ]
         }
 	  ],
@@ -213,17 +284,49 @@
           "Name": "Created",
           "DisplayName": "Created",
           "Description": "...",
-          "PercentComplete": 20,
+          "PercentComplete": 0,
           "Value": 0,
           "Style": "Success",
           "Transitions": [
             {
-              "AllowedRoles": ["Contractor", "Contracted", "Testifier"],
-              "AllowedInstanceRoles": [],
+              "AllowedRoles": ["Interactor", "Participant"],
+              "AllowedInstanceRoles": ["Interactor"],
               "Description": "...",
               "Function": "Sign",
               "NextStates": [ "Signed" ],
               "DisplayName": "Sign"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Update",
+              "NextStates": [ "Created" ],
+              "DisplayName": "Update"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "AddParticipant",
+              "NextStates": [ "Created" ],
+              "DisplayName": "Add Participant"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "RemoveParticipant",
+              "NextStates": [ "Created" ],
+              "DisplayName": "Remove Participant"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Cancel",
+              "NextStates": [ "Canceled" ],
+              "DisplayName": "Cancel"
             }
           ]
         },
@@ -231,17 +334,33 @@
           "Name": "Signed",
           "DisplayName": "Signed",
           "Description": "...",
-          "PercentComplete": 50,
+          "PercentComplete": 40,
           "Value": 1,
           "Style": "Success",
           "Transitions": [
             {
-              "AllowedRoles": ["Creator"],
+              "AllowedRoles": ["Creator", "Interactor"],
               "AllowedInstanceRoles": [],
               "Description": "...",
               "Function": "Activate",
               "NextStates": ["Active"],
               "DisplayName": "Activate"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Update",
+              "NextStates": [ "Created" ],
+              "DisplayName": "Update"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Cancel",
+              "NextStates": [ "Canceled" ],
+              "DisplayName": "Cancel"
             }
           ]
         },
@@ -249,28 +368,81 @@
           "Name": "Active",
           "DisplayName": "Active",
           "Description": "...",
-          "PercentComplete": 100,
+          "PercentComplete": 80,
           "Value": 2,
           "Style": "Success",
           "Transitions": [
             {
-              "AllowedRoles": ["Creator"],
+              "AllowedRoles": ["Creator", "Interactor"],
               "AllowedInstanceRoles": [],
               "Description": "...",
-              "Function": "Inactivate",
-              "NextStates": ["Inactive"],
-              "DisplayName": "Inactivate"
+              "Function": "Pause",
+              "NextStates": ["Paused"],
+              "DisplayName": "Pause"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Terminate",
+              "NextStates": [ "Terminated" ],
+              "DisplayName": "Terminate"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Cancel",
+              "NextStates": [ "Canceled" ],
+              "DisplayName": "Cancel"
             }
           ]
         },
         {
-          "Name": "Inactive",
-          "DisplayName": "Inactive",
+          "Name": "Paused",
+          "DisplayName": "Paused",
+          "Description": "...",
+          "PercentComplete": 50,
+          "Value": 1,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Activate",
+              "NextStates": ["Active"],
+              "DisplayName": "Activate"
+            },
+            {
+              "AllowedRoles": ["Creator", "Interactor"],
+              "AllowedInstanceRoles": [],
+              "Description": "...",
+              "Function": "Cancel",
+              "NextStates": [ "Canceled" ],
+              "DisplayName": "Cancel"
+            }
+          ]
+		},
+        {
+          "Name": "Terminated",
+          "DisplayName": "Terminated",
           "Description": "...",
           "PercentComplete": 100,
           "Value": 3,
           "Style": "Success",
-          "Transitions": []
+          "Transitions": [
+          ]
+		},
+        {
+          "Name": "Canceled",
+          "DisplayName": "Canceled",
+          "Description": "...",
+          "PercentComplete": 100,
+          "Value": 1,
+          "Style": "Fail",
+          "Transitions": [
+          ]
 		}
 	  ]  
 	}
