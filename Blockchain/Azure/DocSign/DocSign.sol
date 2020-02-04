@@ -19,8 +19,9 @@ contract DocSign {
     uint private _participantsCount;
 
     constructor (string memory id1, string memory id2, string memory hsh, string memory url, address createdBy) public {
-        Update(id1, id2, hsh, url, createdBy);
+        Update(id1, id2, hsh, url);
 
+        CreatedBy = createdBy;
         Interactor = msg.sender;
 
         _participantsCount = 0;
@@ -90,13 +91,11 @@ contract DocSign {
         State = StateType.Canceled;
     }
 
-    function Update(string memory id1, string memory id2, string memory hsh, string memory url, address createdBy) public {
-
+    function Update(string memory id1, string memory id2, string memory hsh, string memory url) public {
         Id1 = id1;
         Id2 = id2;
         Hsh = hsh;
         Url = url;
-        CreatedBy = createdBy;
 
         State = StateType.Created;
 

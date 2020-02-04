@@ -267,14 +267,6 @@
               "Type": {
                 "Name": "string"
               }
-            },
-            {
-              "Name": "createdBy",
-              "Description": "...",
-              "DisplayName": "Created By",
-              "Type": {
-                "Name": "Creator"
-              }
             }
           ]
         }
