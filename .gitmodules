@@ -1,0 +1,3 @@
+[submodule "Web/React/tests-react-products"]
+	path = Web/React/tests-react-products
+	url = https://github.com/brunoserrano/tests-react-products.git
