@@ -1,3 +1,6 @@
 [submodule "Web/React/tests-react-products"]
 	path = Web/React/tests-react-products
 	url = https://github.com/brunoserrano/tests-react-products.git
+[submodule "Mobile/ReactNative/tests-react-native-products"]
+	path = Mobile/ReactNative/tests-react-native-products
+	url = https://github.com/brunoserrano/tests-react-native-products.git
