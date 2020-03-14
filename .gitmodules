@@ -10,3 +10,15 @@
 [submodule "Mobile/iOS/tests-ios-products"]
 	path = Mobile/iOS/tests-ios-products
 	url = https://github.com/brunoserrano/tests-ios-products.git
+[submodule "Web/Rust/rust-hello-world"]
+	path = Web/Rust/rust-hello-world
+	url = https://github.com/brunoserrano/rust-hello-world.git
+[submodule "Web/Rust/rust-sample-api"]
+	path = Web/Rust/rust-sample-api
+	url = https://github.com/brunoserrano/rust-sample-api.git
+[submodule "Web/Python/python-sample-api"]
+	path = Web/Python/python-sample-api
+	url = https://github.com/brunoserrano/python-sample-api.git
+[submodule "Mobile/ReactNative/twilio-call"]
+	path = Mobile/ReactNative/twilio-call
+	url = https://github.com/brunoserrano/twilio-call.git
