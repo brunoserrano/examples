@@ -7,3 +7,6 @@
 [submodule "Web/Node/tests-node-products"]
 	path = Web/Node/tests-node-products
 	url = https://github.com/brunoserrano/tests-node-products.git
+[submodule "Mobile/iOS/tests-ios-products"]
+	path = Mobile/iOS/tests-ios-products
+	url = https://github.com/brunoserrano/tests-ios-products.git
